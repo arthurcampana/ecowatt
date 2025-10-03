@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro - Consumo Consciente</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .register-card {
+      padding: 3rem;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 450px;
+    }
+
+    .logo {
+      display: block;
+      margin: 0 auto 2rem auto;
+      max-width: 180px;
+    }
+
+    .register-card h4 {
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .form-control {
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+      padding: 0.8rem;
+    }
+
+    .btn-primary {
+      width: 100%;
+      font-size: 1.2rem;
+      padding: 0.8rem;
+    }
+
+    .text-center a {
+      text-decoration: none;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="register-card">
+    <img src="img/logo.png" alt="Logo" class="logo">
+    <h4>Cadastro</h4>
+    <form>
+      <input type="text" class="form-control" placeholder="Nome completo" required>
+      <input type="email" class="form-control" placeholder="Email" required>
+      <input type="password" class="form-control" placeholder="Senha" required>
+      <input type="password" class="form-control" placeholder="Confirmar Senha" required>
+      <a href="login.html" class="btn btn-primary">Cadastrar</a>
+    </form>
+    <p class="text-center mt-3">Já tem conta? <a href="login.html">Entrar</a></p>
+  </div>
+</body>
+</html>
