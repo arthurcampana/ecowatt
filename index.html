@@ -6,30 +6,130 @@
     <title>Document</title>
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-header">
         <div class="container">
           <a class="navbar-brand" href="index.html"><img src="img/logo.png" alt="" class="logo"></a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="index.html">Relatórios</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Metas</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">configurações</a>
-              </li>
+              <li class="nav-item"><a class="nav-link active" href="index.html">Início</a></li>
+              <li class="nav-item"><a class="nav-link" href="#">Relatórios</a></li>
+              <li class="nav-item"><a class="nav-link" href="#">Metas</a></li>
+              <li class="nav-item"><a class="nav-link" href="#">Configurações</a></li>
             </ul>
           </div>
         </div>
-      </nav>
-    
+    </nav>
+
+    <!-- CONTEÚDO DO DASHBOARD -->
+    <main class="container mt-4">
+
+        <!-- CARDS RESUMO -->
+        <div class="row g-3">
+            <div class="col-md-3">
+                <div class="card shadow-sm p-3">
+                    <h6>Consumo Atual (Mês)</h6>
+                    <h2>142 kWh</h2>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm p-3">
+                    <h6>Meta Mensal</h6>
+                    <div class="progress">
+                        <div class="progress-bar bg-success" style="width: 68%;">68%</div>
+                    </div>
+                    <small>Meta: 200 kWh</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm p-3">
+                    <h6>Comparativo Mês Anterior</h6>
+                    <h4>-12%</h4>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm p-3 bg-success">
+                    <h6>Alerta</h6>
+                    <p>Consumo dentro do previsto</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- GRÁFICO -->
+        <div class="card shadow-sm p-3 mt-4">
+            <h5>Gráfico de Consumo Diário</h5>
+            <canvas id="graficoConsumo" height="100"></canvas>
+        </div>
+
+        <div class="card shadow-sm p-3 mt-4">
+            <h5>Comparativo Mês Atual x Mês Anterior</h5>
+            <canvas id="graficoComparativo" height="100"></canvas>
+        </div>
+
+    </main>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
+
+    <!-- SCRIPTS DOS GRAFICOS -->
+    <script>
+        const ctx = document.getElementById('graficoConsumo').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'bar', // pode trocar para 'bar'
+            data: {
+                labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                datasets: [{
+                    label: 'kWh por dia',
+                    data: [12, 14, 9, 15, 20, 18, 21],
+                    borderWidth: 2,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    </script>
+    
+<script>
+    const ctx2 = document.getElementById('graficoComparativo').getContext('2d');
+    const graficoComparativo = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
+            datasets: [
+                {
+                    label: 'Mês Atual',
+                    data: [42, 48, 39, 30],
+                    borderWidth: 1
+                },
+                {
+                    label: 'Mês Anterior',
+                    data: [45, 50, 41, 34],
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: true }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+</script>
+
 </body>
 </html>

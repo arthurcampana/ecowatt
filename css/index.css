@@ -1,3 +1,22 @@
 .logo{
     height: 120px;
 }
+
+    .card h6 {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .card h2, .card h4 {
+      font-size: 2.2rem;
+      font-weight: bold;
+    }
+
+    .card p, .card small {
+      font-size: 1.1rem;
+    }
+
+    main.container {
+      transform: scale(1.05);
+      transform-origin: top left;
+    }
