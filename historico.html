@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Histórico de Consumo</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg bg-header">
+    <div class="container">
+      <a class="navbar-brand" href="index.html"><img src="img/logo.png" alt="Logo" class="logo"></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
+          <li class="nav-item"><a class="nav-link" href="relatorios.html">Relatórios</a></li>
+          <li class="nav-item"><a class="nav-link" href="metas.html">Metas</a></li>
+          <li class="nav-item"><a class="nav-link" href="configuracoes.html">Configurações</a></li>
+          <li class="nav-item"><a class="nav-link active" href="historico.html">Histórico</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- CONTEÚDO HISTÓRICO -->
+  <main class="container mt-4">
+    <div class="mb-4">
+      <h3>Histórico de Consumo</h3>
+      <p>Visualize todos os registros de consumo e analise seu histórico detalhado.</p>
+    </div>
+
+    <!-- FILTRO -->
+    <div class="card shadow-sm p-4 mb-4">
+      <form class="row g-3" id="formHistorico">
+        <div class="col-md-3">
+          <label for="tipoHistorico" class="form-label">Tipo de Histórico</label>
+          <select class="form-select" id="tipoHistorico">
+            <option value="diario" selected>Diário</option>
+            <option value="semanal">Semanal</option>
+            <option value="mensal">Mensal</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label for="dataInicio" class="form-label">Data Início</label>
+          <input type="date" class="form-control" id="dataInicio">
+        </div>
+        <div class="col-md-3">
+          <label for="dataFim" class="form-label">Data Fim</label>
+          <input type="date" class="form-control" id="dataFim">
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+          <button type="submit" class="btn btn-primary w-100">Buscar Histórico</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- RESULTADO -->
+    <div id="resultadoHistorico" style="display:none;">
+      <!-- GRÁFICO -->
+      <div class="card shadow-sm p-3 mb-4">
+        <h5>Gráfico de Consumo</h5>
+        <canvas id="graficoHistorico" height="200"></canvas>
+      </div>
+
+      <!-- TABELA -->
+      <div class="card shadow-sm p-3 mb-4">
+        <h5>Registros Detalhados</h5>
+        <table class="table table-striped" id="tabelaHistorico">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Consumo (kWh)</th>
+              <th>Meta (kWh)</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Linhas serão adicionadas pelo JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Dados simulados para histórico
+    const historicoSimulado = [
+      {data:'2025-10-01', consumo:12, meta:20},
+      {data:'2025-10-02', consumo:14, meta:20},
+      {data:'2025-10-03', consumo:18, meta:20},
+      {data:'2025-10-04', consumo:22, meta:20},
+      {data:'2025-10-05', consumo:19, meta:20},
+      {data:'2025-10-06', consumo:25, meta:20},
+      {data:'2025-10-07', consumo:21, meta:20},
+    ];
+
+    const resultadoDiv = document.getElementById('resultadoHistorico');
+    let graficoHistorico;
+
+    document.getElementById('formHistorico').addEventListener('submit', function(e){
+      e.preventDefault();
+
+      // Filtra dados por datas selecionadas
+      const tipo = document.getElementById('tipoHistorico').value;
+      const dataInicio = document.getElementById('dataInicio').value;
+      const dataFim = document.getElementById('dataFim').value;
+
+      let dadosFiltrados = historicoSimulado;
+
+      if(dataInicio) dadosFiltrados = dadosFiltrados.filter(d => d.data >= dataInicio);
+      if(dataFim) dadosFiltrados = dadosFiltrados.filter(d => d.data <= dataFim);
+
+      if(dadosFiltrados.length === 0){
+        alert('Nenhum registro encontrado para o período selecionado.');
+        return;
+      }
+
+      resultadoDiv.style.display = 'block';
+
+      // Atualiza tabela
+      const tbody = document.getElementById('tabelaHistorico').querySelector('tbody');
+      tbody.innerHTML = '';
+      dadosFiltrados.forEach(item => {
+        const status = item.consumo <= item.meta ? 'Dentro da Meta' : 'Acima da Meta';
+        tbody.innerHTML += `
+          <tr>
+            <td>${item.data}</td>
+            <td>${item.consumo}</td>
+            <td>${item.meta}</td>
+            <td>${status}</td>
+          </tr>
+        `;
+      });
+
+      // Atualiza gráfico
+      const labels = dadosFiltrados.map(d => d.data);
+      const dataConsumo = dadosFiltrados.map(d => d.consumo);
+      const dataMeta = dadosFiltrados.map(d => d.meta);
+
+      if(graficoHistorico) graficoHistorico.destroy();
+
+      const ctx = document.getElementById('graficoHistorico').getContext('2d');
+      graficoHistorico = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            { label: 'Consumo', data: dataConsumo, borderColor: 'blue', fill: false, tension:0.2 },
+            { label: 'Meta', data: dataMeta, borderColor: 'green', borderDash: [5,5], fill: false, tension:0.2 }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: true } },
+          scales: { y: { beginAtZero:true } }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

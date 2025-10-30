@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatórios de Consumo</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg bg-header">
+    <div class="container">
+      <a class="navbar-brand" href="index.html"><img src="img/logo.png" alt="Logo" class="logo"></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
+          <li class="nav-item"><a class="nav-link active" href="relatorios.html">Relatórios</a></li>
+          <li class="nav-item"><a class="nav-link" href="metas.html">Metas</a></li>
+          <li class="nav-item"><a class="nav-link" href="configuracoes.html">Configurações</a></li>
+          <li class="nav-item"><a class="nav-link" href="historico.html">Histórico</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- CONTEÚDO DE RELATÓRIOS -->
+  <main class="container mt-4">
+    <!-- FORMULÁRIO DE FILTRO -->
+    <div class="card shadow-sm p-3 mb-4">
+      <h5>Gerar Relatório</h5>
+      <form class="row g-3" id="formRelatorio">
+        <div class="col-md-4">
+          <label for="mesRelatorio" class="form-label">Mês</label>
+          <select class="form-select" id="mesRelatorio">
+            <option value="10" selected>Outubro</option>
+            <option value="11">Novembro</option>
+            <option value="12">Dezembro</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="tipoRelatorio" class="form-label">Tipo de Relatório</label>
+          <select class="form-select" id="tipoRelatorio">
+            <option value="diario" selected>Consumo Diário</option>
+            <option value="semanal">Comparativo Semanal</option>
+            <option value="mensal">Meta Mensal</option>
+          </select>
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+          <button type="submit" class="btn btn-primary w-100">Gerar Relatório</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- CARDS E GRÁFICOS (OCULTOS ATÉ GERAR RELATÓRIO) -->
+    <div id="resultadoRelatorio" style="display:none;">
+      <!-- CARDS DE RESUMO -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-3">
+          <div class="card shadow-sm p-3">
+            <h6>Consumo Total</h6>
+            <h2 id="consumoTotal">0 kWh</h2>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card shadow-sm p-3">
+            <h6>Meta Mensal</h6>
+            <div class="progress">
+              <div class="progress-bar bg-success" id="progressMeta" style="width: 0%;">0%</div>
+            </div>
+            <small>Meta: 200 kWh</small>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card shadow-sm p-3">
+            <h6>Comparativo Mês Anterior</h6>
+            <h4 id="comparativoMes">0%</h4>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card shadow-sm p-3 bg-warning">
+            <h6>Alerta</h6>
+            <p id="alertaRelatorio">Sem dados</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- GRÁFICOS -->
+      <div class="card shadow-sm p-3 mb-4" id="graficoDiarioCard">
+        <h5>Consumo Diário do Mês</h5>
+        <canvas id="graficoDiario" height="200"></canvas>
+      </div>
+
+      <div class="card shadow-sm p-3 mb-4" id="graficoSemanalCard">
+        <h5>Comparativo Semanal</h5>
+        <canvas id="graficoSemanal" height="200"></canvas>
+      </div>
+
+      <div class="card shadow-sm p-3 mb-4" id="graficoMensalCard">
+        <h5>Progresso Mensal x Meta</h5>
+        <canvas id="graficoMensal" height="200"></canvas>
+      </div>
+    </div>
+  </main>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Dados simulados
+    const dados = {
+      diario: [12, 14, 9, 15, 20, 18, 21],
+      semanalAtual: [42, 48, 39, 30],
+      semanalAnterior: [45, 50, 41, 34],
+      metaMensal: 200
+    };
+
+    const resultadoDiv = document.getElementById('resultadoRelatorio');
+    const graficoDiarioCard = document.getElementById('graficoDiarioCard');
+    const graficoSemanalCard = document.getElementById('graficoSemanalCard');
+    const graficoMensalCard = document.getElementById('graficoMensalCard');
+
+    let graficoDiario, graficoSemanal, graficoMensal;
+
+    document.getElementById('formRelatorio').addEventListener('submit', function(e){
+      e.preventDefault();
+      resultadoDiv.style.display = 'block'; // Mostra cards e gráficos
+
+      const tipo = document.getElementById('tipoRelatorio').value;
+      const totalConsumo = dados.diario.reduce((a,b)=>a+b,0);
+      const progresso = Math.min((totalConsumo/dados.metaMensal)*100, 100);
+
+      // Atualiza cards
+      document.getElementById('consumoTotal').textContent = totalConsumo + ' kWh';
+      document.getElementById('progressMeta').style.width = progresso + '%';
+      document.getElementById('progressMeta').textContent = Math.round(progresso) + '%';
+      document.getElementById('comparativoMes').textContent = '-12%';
+      const alerta = document.getElementById('alertaRelatorio');
+      if (totalConsumo > dados.metaMensal) {
+        alerta.textContent = 'Consumo acima da meta!';
+        alerta.parentElement.classList.add('bg-danger');
+        alerta.parentElement.classList.remove('bg-warning');
+      } else {
+        alerta.textContent = 'Consumo dentro do previsto';
+        alerta.parentElement.classList.add('bg-warning');
+        alerta.parentElement.classList.remove('bg-danger');
+      }
+
+      // Oculta todos os gráficos
+      graficoDiarioCard.style.display = 'none';
+      graficoSemanalCard.style.display = 'none';
+      graficoMensalCard.style.display = 'none';
+
+      // Renderiza apenas o gráfico selecionado
+      if(tipo === 'diario'){
+        graficoDiarioCard.style.display = 'block';
+        if(graficoDiario) graficoDiario.destroy();
+        const ctxDiario = document.getElementById('graficoDiario').getContext('2d');
+        graficoDiario = new Chart(ctxDiario, {
+          type: 'bar',
+          data: { labels: ['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'], datasets: [{ label:'kWh', data:dados.diario, backgroundColor:'rgba(54,162,235,0.6)'}] },
+          options:{ responsive:true, scales:{ y:{ beginAtZero:true } } }
+        });
+      } else if(tipo === 'semanal'){
+        graficoSemanalCard.style.display = 'block';
+        if(graficoSemanal) graficoSemanal.destroy();
+        const ctxSemanal = document.getElementById('graficoSemanal').getContext('2d');
+        graficoSemanal = new Chart(ctxSemanal, {
+          type:'bar',
+          data:{
+            labels:['Semana 1','Semana 2','Semana 3','Semana 4'],
+            datasets:[
+              {label:'Mês Atual', data:dados.semanalAtual, backgroundColor:'rgba(75,192,192,0.6)'},
+              {label:'Mês Anterior', data:dados.semanalAnterior, backgroundColor:'rgba(255,99,132,0.6)'}
+            ]
+          },
+          options:{ responsive:true, scales:{ y:{ beginAtZero:true } } }
+        });
+      } else if(tipo === 'mensal'){
+        graficoMensalCard.style.display = 'block';
+        if(graficoMensal) graficoMensal.destroy();
+        const ctxMensal = document.getElementById('graficoMensal').getContext('2d');
+        graficoMensal = new Chart(ctxMensal, {
+          type:'line',
+          data:{
+            labels:['Semana 1','Semana 2','Semana 3','Semana 4'],
+            datasets:[
+              { label:'Meta', data:[50,50,50,50], borderColor:'green', borderWidth:2, fill:false },
+              { label:'Consumo', data:dados.semanalAtual, borderColor:'blue', borderWidth:2, fill:false }
+            ]
+          },
+          options:{ responsive:true }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

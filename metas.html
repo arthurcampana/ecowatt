@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Definir Metas</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg bg-header">
+    <div class="container">
+      <a class="navbar-brand" href="index.html"><img src="img/logo.png" alt="Logo" class="logo"></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
+          <li class="nav-item"><a class="nav-link" href="relatorios.html">Relatórios</a></li>
+          <li class="nav-item"><a class="nav-link active" href="metas.html">Metas</a></li>
+          <li class="nav-item"><a class="nav-link" href="configuracoes.html">Configurações</a></li>
+          <li class="nav-item"><a class="nav-link" href="historico.html">Histórico</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- CONTEÚDO DE METAS -->
+  <main class="container mt-4">
+    <!-- TÍTULO -->
+    <div class="mb-4">
+      <h3>Definir Meta de Consumo</h3>
+      <p>Configure sua meta mensal de consumo de energia para monitoramento e alertas personalizados.</p>
+    </div>
+
+    <!-- FORMULÁRIO DE DEFINIÇÃO DE META -->
+    <div class="card shadow-sm p-4 mb-4">
+      <form id="formMetas">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label for="mesMeta" class="form-label">Mês</label>
+            <select class="form-select" id="mesMeta" required>
+              <option value="10" selected>Outubro</option>
+              <option value="11">Novembro</option>
+              <option value="12">Dezembro</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label for="metaMensal" class="form-label">Meta Mensal (kWh)</label>
+            <input type="number" class="form-control" id="metaMensal" placeholder="Ex: 200" min="1" required>
+          </div>
+          <div class="col-md-4 d-flex align-items-end">
+            <button type="submit" class="btn btn-success w-100">Salvar Meta</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- CARDS DE RESUMO -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-3">
+        <div class="card shadow-sm p-3">
+          <h6>Meta Atual</h6>
+          <h2 id="metaAtual">200 kWh</h2>
+          <div class="progress mt-2">
+            <div id="barraProgresso" class="progress-bar bg-success" style="width: 68%;">68%</div>
+          </div>
+          <small>Consumo atual: 142 kWh</small>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card shadow-sm p-3 bg-warning">
+          <h6>Alerta</h6>
+          <p id="alertaMeta">Consumo dentro do previsto</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRÁFICO DE PROGRESSO -->
+    <div class="card shadow-sm p-3 mb-4">
+      <h5>Progresso de Consumo Mensal</h5>
+      <canvas id="graficoProgresso" height="200"></canvas>
+    </div>
+  </main>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Simulação de dados de consumo diário
+    let consumoDiario = [12, 14, 9, 15, 20, 18, 21]; // kWh
+
+    const ctx = document.getElementById('graficoProgresso').getContext('2d');
+    const grafico = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+        datasets: [{
+          label: 'kWh por dia',
+          data: consumoDiario,
+          backgroundColor: 'rgba(54,162,235,0.6)'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+
+    // Atualização da meta e barra de progresso
+    const formMetas = document.getElementById('formMetas');
+    formMetas.addEventListener('submit', function(e){
+      e.preventDefault();
+      const meta = parseInt(document.getElementById('metaMensal').value);
+      const totalConsumo = consumoDiario.reduce((a,b)=>a+b,0);
+      const progresso = Math.min((totalConsumo/meta)*100, 100);
+
+      document.getElementById('metaAtual').textContent = meta + ' kWh';
+      document.getElementById('barraProgresso').style.width = progresso + '%';
+      document.getElementById('barraProgresso').textContent = Math.round(progresso) + '%';
+
+      const alerta = document.getElementById('alertaMeta');
+      if (totalConsumo > meta) {
+        alerta.textContent = 'Consumo acima da meta!';
+        alerta.parentElement.classList.add('bg-danger');
+        alerta.parentElement.classList.remove('bg-warning');
+      } else {
+        alerta.textContent = 'Consumo dentro do previsto';
+        alerta.parentElement.classList.add('bg-warning');
+        alerta.parentElement.classList.remove('bg-danger');
+      }
+
+      alert('Meta salva com sucesso!');
+    });
+  </script>
+</body>
+</html>

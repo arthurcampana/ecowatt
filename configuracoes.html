@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configurações</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg bg-header">
+    <div class="container">
+      <a class="navbar-brand" href="index.html"><img src="img/logo.png" alt="Logo" class="logo"></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
+          <li class="nav-item"><a class="nav-link" href="relatorios.html">Relatórios</a></li>
+          <li class="nav-item"><a class="nav-link" href="metas.html">Metas</a></li>
+          <li class="nav-item"><a class="nav-link active" href="configuracoes.html">Configurações</a></li>
+          <li class="nav-item"><a class="nav-link" href="historico.html">Histórico</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- CONTEÚDO CONFIGURAÇÕES -->
+  <main class="container mt-4">
+    <div class="mb-4">
+      <h3>Configurações do Sistema</h3>
+      <p>Personalize as opções do sistema de monitoramento de consumo de energia.</p>
+    </div>
+
+    <div class="card shadow-sm p-4 mb-4">
+      <form id="formConfiguracoes" class="row g-3">
+        <!-- Unidades de medida -->
+        <div class="col-md-6">
+          <label for="unidadeMedida" class="form-label">Unidade de Medida</label>
+          <select class="form-select" id="unidadeMedida">
+            <option value="kWh" selected>kWh</option>
+            <option value="MWh">MWh</option>
+          </select>
+        </div>
+
+        <!-- Tema do sistema -->
+        <div class="col-md-6">
+          <label for="temaSistema" class="form-label">Tema do Sistema</label>
+          <select class="form-select" id="temaSistema">
+            <option value="claro" selected>Claro</option>
+            <option value="escuro">Escuro</option>
+            <option value="altoContraste">Alto Contraste</option>
+          </select>
+        </div>
+
+        <!-- Alertas -->
+        <div class="col-md-6">
+          <label class="form-label">Alertas de Consumo</label>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="alertaEmail" checked>
+            <label class="form-check-label" for="alertaEmail">Notificações por e-mail</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="alertaPush">
+            <label class="form-check-label" for="alertaPush">Notificações push</label>
+          </div>
+        </div>
+
+        <!-- Offline -->
+        <div class="col-md-6">
+          <label class="form-label">Funcionalidades Offline</label>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="offlineHistorico" checked>
+            <label class="form-check-label" for="offlineHistorico">Acessar histórico offline</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="offlineGrafico">
+            <label class="form-check-label" for="offlineGrafico">Visualizar gráficos offline</label>
+          </div>
+        </div>
+
+        <!-- Botão salvar -->
+        <div class="col-12">
+          <button type="submit" class="btn btn-success w-100">Salvar Configurações</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- SCRIPTS -->
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Evento de salvar configurações
+    document.getElementById('formConfiguracoes').addEventListener('submit', function(e){
+      e.preventDefault();
+
+      const configs = {
+        unidade: document.getElementById('unidadeMedida').value,
+        tema: document.getElementById('temaSistema').value,
+        alertaEmail: document.getElementById('alertaEmail').checked,
+        alertaPush: document.getElementById('alertaPush').checked,
+        offlineHistorico: document.getElementById('offlineHistorico').checked,
+        offlineGrafico: document.getElementById('offlineGrafico').checked
+      };
+
+      // Aqui você poderia salvar no localStorage ou enviar para API
+      localStorage.setItem('configSistema', JSON.stringify(configs));
+
+      alert('Configurações salvas com sucesso!');
+    });
+
+    // Carregar configurações salvas
+    window.addEventListener('load', () => {
+      const configs = JSON.parse(localStorage.getItem('configSistema'));
+      if(configs){
+        document.getElementById('unidadeMedida').value = configs.unidade;
+        document.getElementById('temaSistema').value = configs.tema;
+        document.getElementById('alertaEmail').checked = configs.alertaEmail;
+        document.getElementById('alertaPush').checked = configs.alertaPush;
+        document.getElementById('offlineHistorico').checked = configs.offlineHistorico;
+        document.getElementById('offlineGrafico').checked = configs.offlineGrafico;
+      }
+    });
+  </script>
+</body>
+</html>
