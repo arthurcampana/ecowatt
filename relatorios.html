@@ -53,6 +53,11 @@
           <button type="submit" class="btn btn-primary w-100">Gerar Relatório</button>
         </div>
       </form>
+      <div class="row mb-4">
+        <div class="col-md-4 offset-md-8 mt-3">
+            <button type="button" class="btn btn-success w-100" id="btnExportarRelatorio">Exportar Relatório</button>
+        </div>
+    </div>
     </div>
 
     <!-- CARDS E GRÁFICOS (OCULTOS ATÉ GERAR RELATÓRIO) -->
@@ -81,7 +86,7 @@
           </div>
         </div>
         <div class="col-md-3">
-          <div class="card shadow-sm p-3 bg-warning">
+          <div class="card shadow-sm p-3 bg-success">
             <h6>Alerta</h6>
             <p id="alertaRelatorio">Sem dados</p>
           </div>
@@ -91,25 +96,30 @@
       <!-- GRÁFICOS -->
       <div class="card shadow-sm p-3 mb-4" id="graficoDiarioCard">
         <h5>Consumo Diário do Mês</h5>
-        <canvas id="graficoDiario" height="200"></canvas>
+        <canvas id="graficoDiario" height="100"></canvas>
       </div>
 
       <div class="card shadow-sm p-3 mb-4" id="graficoSemanalCard">
         <h5>Comparativo Semanal</h5>
-        <canvas id="graficoSemanal" height="200"></canvas>
+        <canvas id="graficoSemanal" height="100"></canvas>
       </div>
 
       <div class="card shadow-sm p-3 mb-4" id="graficoMensalCard">
         <h5>Progresso Mensal x Meta</h5>
-        <canvas id="graficoMensal" height="200"></canvas>
+        <canvas id="graficoMensal" height="100"></canvas>
       </div>
     </div>
   </main>
 
   <!-- SCRIPTS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="js/bootstrap.bundle.min.js"></script>
   <script>
+
+    let graficoAtivo = null;
+
     // Dados simulados
     const dados = {
       diario: [12, 14, 9, 15, 20, 18, 21],
@@ -142,10 +152,10 @@
       if (totalConsumo > dados.metaMensal) {
         alerta.textContent = 'Consumo acima da meta!';
         alerta.parentElement.classList.add('bg-danger');
-        alerta.parentElement.classList.remove('bg-warning');
+        alerta.parentElement.classList.remove('bg-success');
       } else {
         alerta.textContent = 'Consumo dentro do previsto';
-        alerta.parentElement.classList.add('bg-warning');
+        alerta.parentElement.classList.add('bg-success');
         alerta.parentElement.classList.remove('bg-danger');
       }
 
@@ -164,6 +174,7 @@
           data: { labels: ['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'], datasets: [{ label:'kWh', data:dados.diario, backgroundColor:'rgba(54,162,235,0.6)'}] },
           options:{ responsive:true, scales:{ y:{ beginAtZero:true } } }
         });
+        graficoAtivo = graficoDiario;
       } else if(tipo === 'semanal'){
         graficoSemanalCard.style.display = 'block';
         if(graficoSemanal) graficoSemanal.destroy();
@@ -179,6 +190,7 @@
           },
           options:{ responsive:true, scales:{ y:{ beginAtZero:true } } }
         });
+        graficoAtivo = graficoSemanal
       } else if(tipo === 'mensal'){
         graficoMensalCard.style.display = 'block';
         if(graficoMensal) graficoMensal.destroy();
@@ -194,8 +206,59 @@
           },
           options:{ responsive:true }
         });
+        graficoAtivo = graficoMensal
+      } else{
+        graficoAtivo = null
       }
     });
+    const contêinerDoRelatorio = document.getElementById('resultadoRelatorio');
+const btnExportar = document.getElementById('btnExportarRelatorio');
+
+
+//exportação para PDF 
+btnExportar.addEventListener('click', function() {
+   
+    if (contêinerDoRelatorio.style.display === 'none' || !graficoAtivo) {
+        alert("Nenhum relatório gerado para exportar. Clique em 'Gerar Relatório' primeiro.");
+        return;
+    }
+    
+    const tipoRelatorio = document.getElementById('tipoRelatorio').options[document.getElementById('tipoRelatorio').selectedIndex].text;
+    const nomeArquivo = `Relatório Completo - ${tipoRelatorio}.pdf`;
+    
+    const mesElement = document.getElementById('mesRelatorio');
+    const nomeMes = mesElement.options[mesElement.selectedIndex].text;
+
+    
+    html2canvas(contêinerDoRelatorio, { 
+        
+        useCORS: true 
+    }).then(canvas => {
+        const imgData = canvas.toDataURL('image/png'); 
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4'); 
+
+        
+        const pdfWidth = 210; 
+        const pdfHeight = 297; 
+        const imgWidth = 190; 
+        
+       
+        const imgHeight = canvas.height * imgWidth / canvas.width; 
+
+        let position = 10; 
+
+        
+        pdf.text(`Relatório de Consumo: ${tipoRelatorio} do mes de ${nomeMes}`, 10, position);
+        position += 10;
+        
+        
+        pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+
+        
+        pdf.save(nomeArquivo);
+    });
+});
   </script>
 </body>
 </html>

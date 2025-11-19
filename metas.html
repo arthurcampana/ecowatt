@@ -71,7 +71,7 @@
         </div>
       </div>
       <div class="col-md-3">
-        <div class="card shadow-sm p-3 bg-warning">
+        <div class="card shadow-sm p-3 bg-success">
           <h6>Alerta</h6>
           <p id="alertaMeta">Consumo dentro do previsto</p>
         </div>
@@ -126,10 +126,10 @@
       if (totalConsumo > meta) {
         alerta.textContent = 'Consumo acima da meta!';
         alerta.parentElement.classList.add('bg-danger');
-        alerta.parentElement.classList.remove('bg-warning');
+        alerta.parentElement.classList.remove('bg-success');
       } else {
         alerta.textContent = 'Consumo dentro do previsto';
-        alerta.parentElement.classList.add('bg-warning');
+        alerta.parentElement.classList.add('bg-success');
         alerta.parentElement.classList.remove('bg-danger');
       }
 
