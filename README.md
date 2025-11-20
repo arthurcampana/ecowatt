@@ -1,7 +1,7 @@
- Monitoramento de Consumo de Eletricidade
+ **Monitoramento de Consumo de Eletricidade**
 Este projeto é um sistema web voltado para a gestão eficiente e análise do consumo de energia elétrica, permitindo que os usuários monitorem, estabeleçam metas e identifiquem potenciais desperdícios.
 
- Funcionalidades
+ **Funcionalidades**
 O sistema oferece um conjunto completo de ferramentas para o controle de energia:
 
 1. Monitoramento e Visualização
@@ -27,7 +27,7 @@ Alertas: Emissão de notificações personalizadas quando o consumo ultrapassa o
 
 Personalização: Permite a customização de metas, unidades de medida e alertas.
 
- Requisitos de Qualidade (Não Funcionais)
+ **Requisitos de Qualidade (Não Funcionais)**
 O desenvolvimento priorizou a robustez e a experiência do usuário:
 
 Usabilidade (UX/UI): Interface intuitiva e de fácil uso, em conformidade com boas práticas de design, legibilidade e hierarquia visual.
@@ -39,7 +39,7 @@ Compatibilidade: Operação em múltiplas plataformas (desktop e móvel) com int
 Disponibilidade: Acesso a funcionalidades básicas, como histórico, mesmo em modo offline.
 
 
- Tecnologias
+ **Tecnologias**
 Frontend: HTML, CSS, JavaScript
 
 Gráficos: Chart.js
