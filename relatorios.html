@@ -15,7 +15,7 @@
   <nav class="navbar navbar-expand-lg bg-header">
     <div class="container">
       <a class="navbar-brand" href="index.html">
-        <img src="img/logo.png" alt="Logo" class="logo">
+        <img src="img/logo.png"   alt="Logo" class="logo">
       </a>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
@@ -256,50 +256,92 @@
     const btnExportar = document.getElementById('btnExportarRelatorio');
 
 
-    //exportação para PDF 
-    btnExportar.addEventListener('click', function() {
-   
+    // EXPORTAÇÃO PARA PDF
+    btnExportar.addEventListener('click', function () {
+
+    // Verifica se existe relatório gerado
     if (contêinerDoRelatorio.style.display === 'none' || !graficoAtivo) {
         alert("Nenhum relatório gerado para exportar. Clique em 'Gerar Relatório' primeiro.");
         return;
     }
-    
-    const tipoRelatorio = document.getElementById('tipoRelatorio').options[document.getElementById('tipoRelatorio').selectedIndex].text;
+
+    const tipoRelatorio = document.getElementById('tipoRelatorio').options[
+        document.getElementById('tipoRelatorio').selectedIndex
+    ].text;
+
     const nomeArquivo = `Relatório Completo - ${tipoRelatorio}.pdf`;
-    
+
     const mesElement = document.getElementById('mesRelatorio');
     const nomeMes = mesElement.options[mesElement.selectedIndex].text;
 
+    // Captura do conteúdo para imagem
+    html2canvas(contêinerDoRelatorio, {
+    scale: 2,
+    useCORS: true
+    }).then(async (canvas) => {
+
+    const imgData = canvas.toDataURL('image/png');
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p', 'mm', 'a4');
+
+    const pdfWidth = 210;
+    const imgWidth = 190;
+    const imgHeight = canvas.height * imgWidth / canvas.width;
+
+    let position = 20;
+
+    // TÍTULO DO RELATÓRIO
+    pdf.setFontSize(14);
+    pdf.text(`Relatório de Consumo - ${tipoRelatorio}`, 50, 15);
+
+    pdf.setFontSize(12);
+    pdf.text(`Mês: ${nomeMes}`, 50, 22);
+
+    position += 20;
+
+    // ADIÇÃO DO GRÁFICO AO PDF
+    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+    position += imgHeight + 10;
+
     
-    html2canvas(contêinerDoRelatorio, { 
-        scale: 2,
-        useCORS: true 
-    }).then(canvas => {
-        const imgData = canvas.toDataURL('image/png'); 
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF('p', 'mm', 'a4'); 
+    // RESUMO DO RELATÓRIO
+    pdf.setFontSize(12);
+    pdf.text("Resumo do Relatório:", 10, position);
+    position += 8;
 
-        
-        const pdfWidth = 210; 
-        const pdfHeight = 297; 
-        const imgWidth = 190; 
-        
-       
-        const imgHeight = canvas.height * imgWidth / canvas.width; 
+    const totalConsumoTxt = document.getElementById('consumoTotal').textContent;
+    const metaTxt = document.getElementById('progressMeta').textContent;
+    const compTxt = document.getElementById('comparativoMes').textContent;
+    const alertaTxt = document.getElementById('alertaRelatorio').textContent;
 
-        let position = 10; 
+    pdf.setFontSize(11);
+    pdf.text(`• Consumo Total: ${totalConsumoTxt}`, 10, position); 
+    position += 6;
 
-        
-        pdf.text(`Relatório de Consumo: ${tipoRelatorio} do mes de ${nomeMes}`, 10, position);
-        position += 10;
-        
-        
-        pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+    pdf.text(`• Progresso da Meta: ${metaTxt}`, 10, position); 
+    position += 6;
 
-        
-        pdf.save(nomeArquivo);
-        });
-    });
+    pdf.text(`• Comparativo com Mês Anterior: ${compTxt}`, 10, position); 
+    position += 6;
+
+    pdf.text(`• Alerta: ${alertaTxt}`, 10, position);
+
+    // SALVAR ARQUIVO PDF
+    pdf.save(nomeArquivo);
+});
+
+});
+
+// Função auxiliar para carregar imagem
+function loadImage(url) {
+return new Promise((resolve) => {
+    const img = new Image();
+    img.src = url;
+    img.onload = () => resolve(img);
+});
+}
+
+
   </script>
 </body>
 </html>
