@@ -43,6 +43,10 @@ Compatibilidade: Operação em múltiplas plataformas (desktop e móvel) com int
 
 Disponibilidade: Acesso a funcionalidades básicas, como histórico, mesmo em modo offline.
 
+**COMO USAR O PROGRAMA**
+
+Após baixar os arquivos, abra o index.html para abrir na aba principal do projeto. A partir desta página, é possível mudar pela barra de navegação para transicionar por outras abas, acessando outras possibilidades.
+
 
 **Tecnologias:**
 
