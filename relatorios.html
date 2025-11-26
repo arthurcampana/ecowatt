@@ -7,6 +7,9 @@
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/index.css">
 </head>
+<style>
+  
+</style>
 <body>
   <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg bg-header">
@@ -26,6 +29,7 @@
           <li class="nav-item"><a class="nav-link" href="metas.html">Metas</a></li>
           <li class="nav-item"><a class="nav-link" href="configuracoes.html">Configurações</a></li>
           <li class="nav-item"><a class="nav-link" href="historico.html">Histórico</a></li>
+          <li class="nav-item"><a class="nav-link" href="perfil.html">Perfil</a></li>
         </ul>
       </div>
     </div>
@@ -129,12 +133,27 @@
     let graficoAtivo = null;
 
     // Dados simulados
-    const dados = {
+    const dadosPorMes = {
+    10: { 
       diario: [12, 14, 9, 15, 20, 18, 21],
       semanalAtual: [42, 48, 39, 30],
       semanalAnterior: [45, 50, 41, 34],
       metaMensal: 200
-    };
+      },
+    11: { 
+      diario: [10, 13, 11, 9, 25, 30, 28],
+      semanalAtual: [50, 44, 38, 52],
+      semanalAnterior: [40, 46, 39, 41],
+      metaMensal: 210
+    },
+    12: { 
+      diario: [20, 22, 25, 30, 28, 26, 24],
+      semanalAtual: [60, 55, 70, 65],
+      semanalAnterior: [52, 48, 67, 60],
+      metaMensal: 250
+    }
+  };
+
 
     const resultadoDiv = document.getElementById('resultadoRelatorio');
     const graficoDiarioCard = document.getElementById('graficoDiarioCard');
@@ -148,8 +167,13 @@
       resultadoDiv.style.display = 'block'; // Mostra cards e gráficos
 
       const tipo = document.getElementById('tipoRelatorio').value;
+      const mes = document.getElementById('mesRelatorio').value;
+      const dados = dadosPorMes[mes];
+
+      // cálculo baseado no mês escolhido
       const totalConsumo = dados.diario.reduce((a,b)=>a+b,0);
-      const progresso = Math.min((totalConsumo/dados.metaMensal)*100, 100);
+      const progresso = Math.min((totalConsumo / dados.metaMensal) * 100, 100);
+
 
       // Atualiza cards
       document.getElementById('consumoTotal').textContent = totalConsumo + ' kWh';
@@ -166,12 +190,20 @@
         alerta.parentElement.classList.add('bg-success');
         alerta.parentElement.classList.remove('bg-danger');
       }
+      
 
       // Oculta todos os gráficos
       graficoDiarioCard.style.display = 'none';
       graficoSemanalCard.style.display = 'none';
       graficoMensalCard.style.display = 'none';
 
+       const comparativo = dados.semanalAtual.map((valorAtual, i) => {
+      const valorAnterior = dados.semanalAnterior?.[i] ?? 0;
+
+      if(valorAnterior === 0) return 0; // evita divisão por zero
+
+      return (((valorAtual - valorAnterior) / valorAnterior) * 100).toFixed(1); 
+      });
       // Renderiza apenas o gráfico selecionado
       if(tipo === 'diario'){
         graficoDiarioCard.style.display = 'block';
@@ -204,12 +236,12 @@
         if(graficoMensal) graficoMensal.destroy();
         const ctxMensal = document.getElementById('graficoMensal').getContext('2d');
         graficoMensal = new Chart(ctxMensal, {
-          type:'line',
+          type:'bar',
           data:{
             labels:['Semana 1','Semana 2','Semana 3','Semana 4'],
             datasets:[
-              { label:'Meta', data:[50,50,50,50], borderColor:'green', borderWidth:2, fill:false },
-              { label:'Consumo', data:dados.semanalAtual, borderColor:'blue', borderWidth:2, fill:false }
+              { label:'Meta', data:[50,50,50,50], backgroundColor:'rgba(75,192,192,0.6)' },
+              { label:'Consumo', data:dados.semanalAtual, backgroundColor:'rgba(255,99,132,0.6)' }
             ]
           },
           options:{ responsive:true }
@@ -218,13 +250,14 @@
       } else{
         graficoAtivo = null
       }
+
     });
     const contêinerDoRelatorio = document.getElementById('resultadoRelatorio');
     const btnExportar = document.getElementById('btnExportarRelatorio');
 
 
-//exportação para PDF 
-btnExportar.addEventListener('click', function() {
+    //exportação para PDF 
+    btnExportar.addEventListener('click', function() {
    
     if (contêinerDoRelatorio.style.display === 'none' || !graficoAtivo) {
         alert("Nenhum relatório gerado para exportar. Clique em 'Gerar Relatório' primeiro.");
@@ -239,7 +272,7 @@ btnExportar.addEventListener('click', function() {
 
     
     html2canvas(contêinerDoRelatorio, { 
-        
+        scale: 2,
         useCORS: true 
     }).then(canvas => {
         const imgData = canvas.toDataURL('image/png'); 
@@ -265,8 +298,8 @@ btnExportar.addEventListener('click', function() {
 
         
         pdf.save(nomeArquivo);
+        });
     });
-});
   </script>
 </body>
 </html>

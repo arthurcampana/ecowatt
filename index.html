@@ -22,15 +22,16 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
-          <li class="nav-item"><a class="nav-link active" href="relatorios.html">Relatórios</a></li>
+          <li class="nav-item"><a class="nav-link active" href="index.html">Início</a></li>
+          <li class="nav-item"><a class="nav-link" href="relatorios.html">Relatórios</a></li>
           <li class="nav-item"><a class="nav-link" href="metas.html">Metas</a></li>
           <li class="nav-item"><a class="nav-link" href="configuracoes.html">Configurações</a></li>
           <li class="nav-item"><a class="nav-link" href="historico.html">Histórico</a></li>
+          <li class="nav-item"><a class="nav-link" href="perfil.html">Perfil</a></li>
         </ul>
-      </div>
-    </div>
-</nav>
+        </div>
+        </div>
+    </nav>
 
     <!-- CONTEÚDO DO DASHBOARD -->
     <main class="container mt-4">
@@ -87,7 +88,7 @@
     <script>
         const ctx = document.getElementById('graficoConsumo').getContext('2d');
         const chart = new Chart(ctx, {
-            type: 'bar', // pode trocar para 'bar'
+            type: 'bar',
             data: {
                 labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
                 datasets: [{
