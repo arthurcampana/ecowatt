@@ -70,13 +70,13 @@
         <!-- GRÁFICO -->
         <div class="card shadow-sm p-3 mt-4">
             <h5>Gráfico de Consumo Diário</h5>
-            <button style="max-width: 10%;" onclick='mudarTipoGrafico()' class="offset-md-11" id="botaoStyle"> Mudar Estilo </button>
+            <button style="max-width: 10%;" onclick='mudarTipoGrafico(chart)' class="offset-md-11" id="botaoStyle"> Mudar Estilo </button>
             <canvas id="graficoConsumo" height="200"></canvas>
         </div>
 
         <div class="card shadow-sm p-3 mt-4">
             <h5>Comparativo Mês Atual x Mês Anterior</h5>
-            <button style="max-width: 10%;" onclick="mudarTipoGrafico()" class="offset-md-11" id="botaoStyle"> Mudar Estilo </button>
+            <button style="max-width: 10%;" onclick="mudarTipoGrafico(graficoComparativo)" class="offset-md-11" id="botaoStyle"> Mudar Estilo </button>
             <canvas id="graficoComparativo" height="200"></canvas>
         </div>
 
@@ -91,13 +91,13 @@
     <!-- SCRIPTS DOS GRAFICOS -->
     <script>
 
-    function mudarTipoGrafico(){
-        if(chart.config.type == 'bar'){
-            chart.config.type = 'line'
+    function mudarTipoGrafico(grafico){
+        if(grafico.config.type == 'bar'){
+            grafico.config.type = 'line'
         } else {
-            chart.config.type = 'bar'
+            grafico.config.type = 'bar'
         }
-        chart.update()
+        grafico.update()
     }
 
 

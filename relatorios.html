@@ -105,16 +105,19 @@
       <!-- GRÁFICOS -->
       <div class="card shadow-sm p-3 mb-4" id="graficoDiarioCard">
         <h5>Consumo Diário do Mês</h5>
+        <button style="max-width: 10%;" onclick='mudarTipoGrafico(graficoDiario)' class="offset-md-11" id="botaoStyle"> Mudar Estilo </button>
         <canvas id="graficoDiario" height="100"></canvas>
       </div>
 
       <div class="card shadow-sm p-3 mb-4" id="graficoSemanalCard">
         <h5>Comparativo Semanal</h5>
+        <button style="max-width: 10%;" onclick='mudarTipoGrafico(graficoSemanal)' class="offset-md-11" id="botaoStyle"> Mudar Estilo </button>
         <canvas id="graficoSemanal" height="100"></canvas>
       </div>
 
       <div class="card shadow-sm p-3 mb-4" id="graficoMensalCard">
         <h5>Progresso Mensal x Meta</h5>
+        <button style="max-width: 10%;" onclick='mudarTipoGrafico(graficoMensal)' class="offset-md-11" id="botaoStyle"> Mudar Estilo </button>
         <canvas id="graficoMensal" height="100"></canvas>
       </div>
     </div>
@@ -129,6 +132,15 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="js/bootstrap.bundle.min.js"></script>
   <script>
+
+  function mudarTipoGrafico(grafico){
+      if(grafico.config.type == 'bar'){
+          grafico.config.type = 'line'
+      } else {
+          grafico.config.type = 'bar'
+      }
+      grafico.update()
+    }
 
     let graficoAtivo = null;
 
