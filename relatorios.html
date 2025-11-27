@@ -164,7 +164,7 @@
 
     document.getElementById('formRelatorio').addEventListener('submit', function(e){
       e.preventDefault();
-      resultadoDiv.style.display = 'block'; // Mostra cards e gráficos
+      resultadoDiv.style.display = 'block'; 
 
       const tipo = document.getElementById('tipoRelatorio').value;
       const mes = document.getElementById('mesRelatorio').value;
@@ -200,7 +200,7 @@
        const comparativo = dados.semanalAtual.map((valorAtual, i) => {
       const valorAnterior = dados.semanalAnterior?.[i] ?? 0;
 
-      if(valorAnterior === 0) return 0; // evita divisão por zero
+      if(valorAnterior === 0) return 0; 
 
       return (((valorAtual - valorAnterior) / valorAnterior) * 100).toFixed(1); 
       });
