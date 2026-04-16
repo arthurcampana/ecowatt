@@ -68,51 +68,49 @@
   </div>
 
   <script>
-
-    
     const form = document.getElementById('cadastroForm');
-
+    
     form.addEventListener('submit', async function(event) {
-    // Impede a página de recarregar
       event.preventDefault();
-
-    // Coleta os valores
-      const dados = {
-        nome: document.getElementById('nome').value,
-        email: document.getElementById('email').value,
-        senha: document.getElementById('senha').value,
-        confirmacao: document.getElementById('confirmarSenha').value
-      };
-
-    // Validação básica de exemplo
-      if (dados.senha !== dados.confirmacao) {
+    
+      const senha = document.getElementById('senha').value;
+      const confirmarSenha = document.getElementById('confirmarSenha').value;
+    
+      if (senha !== confirmarSenha) {
         alert("As senhas não coincidem!");
         return;
       }
-
+    
+      const dados = {
+        nome: document.getElementById('nome').value,
+        email: document.getElementById('email').value,
+        senha: senha
+      };
+    
       try {
-      const response = await fetch('https://localhost8080/usuario/add', {
-        method: 'POST', // Define que você está enviando dados
-        headers: {
-          'Content-Type': 'application/json' // Avisa o servidor que o corpo é um JSON
-        },
-        body: JSON.stringify(dados) // Transforma o objeto JS em texto JSON
-      });
-
-      if (response.ok) {
-        const resultado = await response.json();
-        alert("Usuário cadastrado com sucesso!");
-        window.location.href = "login.html"; // Redireciona após o sucesso
-      } else {
-        const erro = await response.json();
-        alert("Erro no servidor: " + erro.mensagem);
+        const response = await fetch('http://localhost:8080/usuario/add', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(dados)
+        });
+    
+        if (response.ok) {
+          await response.json();
+          alert("Usuário cadastrado com sucesso!");
+          window.location.href = "login.html";
+        } else {
+          const erro = await response.json().catch(() => null);
+          alert("Erro no servidor: " + (erro?.error || "Erro desconhecido"));
+        }
+    
+      } catch (error) {
+        console.error("Erro:", error);
+        alert("Não foi possível conectar ao servidor.");
       }
-    } catch (error) {
-      console.error("Erro na requisição:", error);
-      alert("Não foi possível conectar ao servidor.");
-    }
     });
-  </script>
+    </script> 
 
 </body>
 </html>

@@ -64,44 +64,48 @@
     </form>
     <p class="text-center mt-3">Não tem conta? <a href="cadastro.html">Criar conta</a></p>
   </div>
- <script>
-
-    
+  <script>
     const form = document.getElementById('LoginForm');
-
+    
     form.addEventListener('submit', async function(event) {
-    // Impede a página de recarregar
       event.preventDefault();
-
-    // Coleta os valores
+    
       const dados = {
         email: document.getElementById('email').value,
         senha: document.getElementById('senha').value
       };
-
+    
       try {
-      const response = await fetch('https://localhost:8080/usuario/login', {
-        method: 'POST', // Define que você está enviando dados
-        headers: {
-          'Content-Type': 'application/json' // Avisa o servidor que o corpo é um JSON
-        },
-        body: JSON.stringify(dados) // Transforma o objeto JS em texto JSON
-      });
-
-      if (response.ok) {
-        const resultado = await response.json();
-        alert("Usuário cadastrado com sucesso!");
-        window.location.href = "login.html"; // Redireciona após o sucesso
-      } else {
-        const erro = await response.json();
-        alert("Erro no servidor: " + erro.mensagem);
+        const response = await fetch('http://localhost:8080/usuario/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(dados)
+        });
+    
+        if (response.ok) {
+          const resultado = await response.json();
+    
+          // ✔ salva no localStorage
+          localStorage.setItem("usuario", JSON.stringify(resultado));
+    
+          alert("Login realizado com sucesso!");
+    
+          // ✔ redireciona
+          window.location.href = "index.html";
+    
+        } else {
+          const erro = await response.json().catch(() => null);
+          alert("Erro: " + (erro?.error || "Email ou senha inválidos"));
+        }
+    
+      } catch (error) {
+        console.error("Erro:", error);
+        alert("Não foi possível conectar ao servidor.");
       }
-    } catch (error) {
-      console.error("Erro na requisição:", error);
-      alert("Não foi possível conectar ao servidor.");
-    }
     });
-  </script>
+    </script>
 
 </body>
 </html>
