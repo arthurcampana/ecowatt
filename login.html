@@ -57,12 +57,51 @@
   <div class="login-card">
     <img src="img/logo.png" alt="Logo" class="logo">
     <h4 class="text-center mb-3">Login</h4>
-    <form action="#" method="POST">
-      <input type="email" class="form-control" placeholder="Email" required>
-      <input type="password" class="form-control" placeholder="Senha" required>
-      <a href="index.html" class="btn btn-primary w-100">Entrar</a>
+    <form id="LoginForm">
+      <input type="email" id="email" class="form-control" placeholder="Email" required>
+      <input type="password" id="senha" class="form-control" placeholder="Senha" required>
+      <button type="submit" class="btn btn-primary">Fazer Login</button>
     </form>
     <p class="text-center mt-3">Não tem conta? <a href="cadastro.html">Criar conta</a></p>
   </div>
+ <script>
+
+    
+    const form = document.getElementById('LoginForm');
+
+    form.addEventListener('submit', async function(event) {
+    // Impede a página de recarregar
+      event.preventDefault();
+
+    // Coleta os valores
+      const dados = {
+        email: document.getElementById('email').value,
+        senha: document.getElementById('senha').value
+      };
+
+      try {
+      const response = await fetch('https://localhost:8080/usuario/login', {
+        method: 'POST', // Define que você está enviando dados
+        headers: {
+          'Content-Type': 'application/json' // Avisa o servidor que o corpo é um JSON
+        },
+        body: JSON.stringify(dados) // Transforma o objeto JS em texto JSON
+      });
+
+      if (response.ok) {
+        const resultado = await response.json();
+        alert("Usuário cadastrado com sucesso!");
+        window.location.href = "login.html"; // Redireciona após o sucesso
+      } else {
+        const erro = await response.json();
+        alert("Erro no servidor: " + erro.mensagem);
+      }
+    } catch (error) {
+      console.error("Erro na requisição:", error);
+      alert("Não foi possível conectar ao servidor.");
+    }
+    });
+  </script>
+
 </body>
 </html>
