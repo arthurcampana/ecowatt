@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrar Consumo</title>
+
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg bg-header">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">
+      <img src="img/logo.png" class="logo">
+    </a>
+
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
+          <li class="nav-item"><a class="nav-link active" href="consumo.html">Registrar Consumo</a></li>
+          <li class="nav-item"><a class="nav-link" href="relatorios.html">Relatórios</a></li>
+          <li class="nav-item"><a class="nav-link" href="metas.html">Metas</a></li>
+          <li class="nav-item"><a class="nav-link" href="configuracoes.html">Configurações</a></li>
+          <li class="nav-item"><a class="nav-link" href="historico.html">Histórico</a></li>
+          <li class="nav-item"><a class="nav-link" href="perfil.html">Perfil</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- CONTEÚDO -->
+<main class="container mt-5">
+
+  <div class="mb-4">
+    <h3>Registrar Consumo</h3>
+    <p>Informe o consumo de energia em kWh.</p>
+  </div>
+
+  <div class="card p-4 shadow-sm">
+
+    <form id="formConsumo">
+
+      <div class="mb-3">
+        <label class="form-label">Consumo (kWh)</label>
+        <input type="number" step="0.01" id="consumoKwh" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Data (opcional)</label>
+        <input type="datetime-local" id="dataRegistro" class="form-control">
+      </div>
+
+      <button type="submit" class="btn btn-success w-100">
+        Salvar Consumo
+      </button>
+
+    </form>
+
+  </div>
+
+</main>
+
+<script>
+
+const form = document.getElementById('formConsumo');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const consumo = parseFloat(document.getElementById('consumoKwh').value);
+  const data = document.getElementById('dataRegistro').value;
+
+  // 🔥 pega usuário logado
+  const usuario = JSON.parse(localStorage.getItem('usuario'));
+
+  if (!usuario || !usuario.id) {
+    alert("Usuário não logado");
+    return;
+  }
+
+  // 🔥 payload EXATO que teu backend espera
+  const payload = {
+    usuario: {
+      id: usuario.id
+    },
+    consumoKwh: consumo,
+    dataRegistro: data ? new Date(data).toISOString() : null
+  };
+
+  try {
+
+    const response = await fetch('http://localhost:8080/consumo/add', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (response.ok) {
+      alert("Consumo registrado com sucesso");
+
+      document.getElementById('formConsumo').reset();
+
+    } else {
+      const erro = await response.text();
+      alert("Erro: " + erro);
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert("Erro de conexão com o backend");
+  }
+
+});
+
+</script>
+
+<script src="js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

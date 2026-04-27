@@ -1,158 +1,167 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard</title>
+
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/index.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
-  <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg bg-header">
-    <div class="container">
-      <a class="navbar-brand" href="index.html">
-        <img src="img/logo.png" alt="Logo" class="logo">
-      </a>
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg bg-header">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">
+      <img src="img/logo.png" alt="Logo" class="logo">
+    </a>
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link active" href="index.html">Início</a></li>
-          <li class="nav-item"><a class="nav-link" href="relatorios.html">Relatórios</a></li>
-          <li class="nav-item"><a class="nav-link" href="metas.html">Metas</a></li>
-          <li class="nav-item"><a class="nav-link" href="configuracoes.html">Configurações</a></li>
-          <li class="nav-item"><a class="nav-link" href="historico.html">Histórico</a></li>
-          <li class="nav-item"><a class="nav-link" href="perfil.html">Perfil</a></li>
-        </ul>
-        </div>
-        </div>
-    </nav>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-    <!-- CONTEÚDO DO DASHBOARD -->
-    <main class="container mt-4">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link active" href="index.html">Início</a></li>
+        <li class="nav-item"><a class="nav-link" href="consumo.html">Registrar Consumo</a></li>
+        <li class="nav-item"><a class="nav-link" href="relatorios.html">Relatórios</a></li>
+        <li class="nav-item"><a class="nav-link" href="metas.html">Metas</a></li>
+        <li class="nav-item"><a class="nav-link" href="configuracoes.html">Configurações</a></li>
+        <li class="nav-item"><a class="nav-link" href="historico.html">Histórico</a></li>
+        <li class="nav-item"><a class="nav-link" href="perfil.html">Perfil</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
 
-        <!-- CARDS RESUMO -->
-        <div class="row g-3">
-            <div class="col-md-3">
-                <div class="card shadow-sm p-3">
-                    <h6>Consumo Atual (Mês)</h6>
-                    <h2>142 kWh</h2>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card shadow-sm p-3">
-                    <h6>Meta Mensal</h6>
-                    <div class="progress">
-                        <div class="progress-bar bg-success" style="width: 68%;">68%</div>
-                    </div>
-                    <small>Meta: 200 kWh</small>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card shadow-sm p-3">
-                    <h6>Comparativo Mês Anterior</h6>
-                    <h4>-12%</h4>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card shadow-sm p-3 bg-success">
-                    <h6>Alerta</h6>
-                    <p>Consumo dentro do previsto</p>
-                </div>
-            </div>
-        </div>
+<!-- CONTEÚDO -->
+<main class="container mt-4">
 
-        <!-- GRÁFICO -->
-        <div class="card shadow-sm p-3 mt-4">
-            <h5>Gráfico de Consumo Diário</h5>
-            <button style="max-width: 10%;" onclick='mudarTipoGrafico(chart)' class="offset-md-11" id="botaoStyle"> Mudar Estilo </button>
-            <canvas id="graficoConsumo" height="200"></canvas>
-        </div>
+  <!-- CARDS -->
+  <div class="row g-3">
+    <div class="col-md-3">
+      <div class="card shadow-sm p-3">
+        <h6>Consumo Atual (Mês)</h6>
+        <h2 id="consumoMes">--</h2>
+      </div>
+    </div>
+  </div>
 
-        <div class="card shadow-sm p-3 mt-4">
-            <h5>Comparativo Mês Atual x Mês Anterior</h5>
-            <button style="max-width: 10%;" onclick="mudarTipoGrafico(graficoComparativo)" class="offset-md-11" id="botaoStyle"> Mudar Estilo </button>
-            <canvas id="graficoComparativo" height="200"></canvas>
-        </div>
+  <!-- GRÁFICO -->
+  <div class="card shadow-sm p-3 mt-4">
+    <h5>Consumo do mês (por dia)</h5>
+    <canvas id="graficoConsumo"></canvas>
+  </div>
 
-    </main>
+</main>
 
-    <!-- SCRIPTS -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="js/bootstrap.bundle.min.js"></script>
-
-
-
-    <!-- SCRIPTS DOS GRAFICOS -->
-    <script>
-
-    function mudarTipoGrafico(grafico){
-        if(grafico.config.type == 'bar'){
-            grafico.config.type = 'line'
-        } else {
-            grafico.config.type = 'bar'
-        }
-        grafico.update()
-    }
-
-
-
-        const ctx = document.getElementById('graficoConsumo').getContext('2d');
-        const chart = new Chart(ctx, {
-            type: "bar",
-            data: {
-                labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
-                datasets: [{
-                    label: 'kWh por dia',
-                    data: [12, 14, 9, 15, 20, 18, 21],
-                    borderWidth: 2,
-                    fill: false
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { display: false }
-                }
-            }
-        });
-    </script>
-    
 <script>
-    const ctx2 = document.getElementById('graficoComparativo').getContext('2d');
-    const graficoComparativo = new Chart(ctx2, {
-        type: 'bar',
+const usuario = JSON.parse(localStorage.getItem("usuario"));
+
+if (!usuario || !usuario.id) {
+    alert("Usuário não logado");
+}
+
+const usuarioId = usuario.id;
+
+// ==========================
+// BUSCAR DADOS DO BACKEND
+// ==========================
+async function carregarConsumos() {
+    try {
+        const response = await fetch(`http://localhost:8080/consumo/usuario/${usuarioId}`);
+        const dados = await response.json();
+
+        processarDados(dados);
+
+    } catch (error) {
+        console.error("Erro ao buscar consumos:", error);
+    }
+}
+
+// ==========================
+// PROCESSAMENTO MENSAL (CORRETO)
+// ==========================
+function processarDados(consumos) {
+
+    const anoAtual = new Date().getFullYear();
+
+    // índice 0 = Jan, 1 = Fev ...
+    const consumoMes = new Array(12).fill(0);
+
+    consumos.forEach(c => {
+
+        if (!c.dataRegistro) return;
+
+        const [ano, mes] = c.dataRegistro.split(" ")[0].split("-");
+
+        const anoNum = parseInt(ano);
+        const mesIndex = parseInt(mes) - 1;
+
+        if (anoNum === anoAtual) {
+            consumoMes[mesIndex] += c.consumoKwh;
+        }
+    });
+
+    atualizarCards(consumoMes);
+    gerarGrafico(consumoMes);
+}
+
+// ==========================
+// ATUALIZA CARDS
+// ==========================
+function atualizarCards(consumoMes) {
+
+    const mesAtual = new Date().getMonth();
+
+    const totalMes = consumoMes[mesAtual];
+
+    document.getElementById("consumoMes").innerText =
+        totalMes.toFixed(2) + " kWh";
+}
+
+// ==========================
+// GRÁFICO MENSAL
+// ==========================
+function gerarGrafico(consumoMes) {
+
+    const labels = [
+        "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
+        "Jul", "Ago", "Set", "Out", "Nov", "Dez"
+    ];
+
+    const ctx = document.getElementById("graficoConsumo").getContext("2d");
+
+    new Chart(ctx, {
+        type: "bar",
         data: {
-            labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
-            datasets: [
-                {
-                    label: 'Mês Atual',
-                    data: [42, 48, 39, 30],
-                    borderWidth: 1
-                },
-                {
-                    label: 'Mês Anterior',
-                    data: [45, 50, 41, 34],
-                    borderWidth: 1
-                }
-            ]
+            labels: labels,
+            datasets: [{
+                label: "Consumo por mês (kWh)",
+                data: consumoMes,
+                borderWidth: 1
+            }]
         },
         options: {
             responsive: true,
-            plugins: {
-                legend: { display: true }
-            },
             scales: {
-                y: { beginAtZero: true }
+                y: {
+                    beginAtZero: true
+                }
             }
         }
     });
+}
+
+// ==========================
+carregarConsumos();
 </script>
+
+<script src="js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

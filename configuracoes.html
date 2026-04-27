@@ -22,6 +22,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
           <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
+          <li class="nav-item"><a class="nav-link" href="consumo.html">Registrar Consumo</a></li>
           <li class="nav-item"><a class="nav-link " href="relatorios.html">Relatórios</a></li>
           <li class="nav-item"><a class="nav-link" href="metas.html">Metas</a></li>
           <li class="nav-item"><a class="nav-link active" href="configuracoes.html">Configurações</a></li>
@@ -38,6 +39,11 @@
       <h3>Configurações do Sistema</h3>
       <p>Personalize as opções do sistema de monitoramento de consumo de energia.</p>
     </div>
+    <div class="mt-4">
+  <button onclick="logout()" class="btn btn-danger w-100">
+    Sair da Conta
+  </button>
+</div>
 
     <div class="card shadow-sm p-4 mb-4">
       <form id="formConfiguracoes" class="row g-3">
@@ -129,5 +135,18 @@
       }
     });
   </script>
+  <script>
+function logout() {
+
+    // remove usuário logado
+    localStorage.removeItem("usuario");
+
+    // opcional: limpa tudo
+    // localStorage.clear();
+
+    // redireciona pro login
+    window.location.href = "login.html";
+}
+</script>
 </body>
 </html>

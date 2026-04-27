@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Teste de Consumo</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+
+<body class="container mt-4">
+
+  <h2>Teste de Consumo</h2>
+
+  <!-- INPUT USER -->
+  <div class="mb-3">
+    <label>ID do Usuário</label>
+    <input type="number" id="usuarioId" class="form-control" placeholder="Ex: 1">
+  </div>
+
+  <!-- BOTÕES -->
+  <div class="mb-3">
+    <button class="btn btn-warning" onclick="gerarDados()">Gerar Dados Fake</button>
+    <button class="btn btn-primary" onclick="listarDados()">Listar Consumos</button>
+  </div>
+
+  <!-- TABELA -->
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Usuário</th>
+        <th>Consumo (kWh)</th>
+        <th>Data</th>
+      </tr>
+    </thead>
+    <tbody id="tabela"></tbody>
+  </table>
+
+<script>
+
+const API = "http://localhost:8080/consumo";
+
+// 🔥 gerar dados fake (sem backend extra)
+async function gerarDados() {
+
+  const usuarioId = document.getElementById("usuarioId").value;
+
+  if (!usuarioId) {
+    alert("Informe o ID do usuário");
+    return;
+  }
+
+  // gera 6 meses
+  for (let i = 0; i < 6; i++) {
+
+    const data = new Date();
+    data.setMonth(data.getMonth() - i);
+
+    const consumo = (100 + Math.random() * 200).toFixed(2);
+
+    const payload = {
+      usuario: { id: Number(usuarioId) },
+      consumoKwh: Number(consumo),
+      dataRegistro: data.toISOString()
+    };
+
+    try {
+      await fetch(API + "/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+    } catch (e) {
+      console.error(e);
+      alert("Erro ao gerar dados");
+      return;
+    }
+  }
+
+  alert("Dados gerados!");
+}
+
+
+// 🔥 listar consumos
+async function listarDados() {
+
+  const usuarioId = document.getElementById("usuarioId").value;
+
+  if (!usuarioId) {
+    alert("Informe o ID do usuário");
+    return;
+  }
+
+  try {
+
+    const response = await fetch(API + "/listar");
+    const data = await response.json();
+
+    // 🔥 filtro no front
+    const filtrado = data.filter(c => c.usuario.id == usuarioId);
+
+    const tabela = document.getElementById("tabela");
+    tabela.innerHTML = "";
+
+    filtrado.forEach(c => {
+      tabela.innerHTML += `
+        <tr>
+          <td>${c.id}</td>
+          <td>${c.usuario.id}</td>
+          <td>${c.consumoKwh.toFixed(2)}</td>
+          <td>${new Date(c.dataRegistro).toLocaleString()}</td>
+        </tr>
+      `;
+    });
+
+  } catch (e) {
+    console.error(e);
+    alert("Erro ao listar");
+  }
+}
+
+</script>
+
+</body>
+</html>
