@@ -1,111 +1,314 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
+
 <head>
+
   <meta charset="UTF-8">
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Consumo Consciente</title>
+
+  <title>
+    Login - Consumo Consciente
+  </title>
+
   <link rel="stylesheet" href="css/bootstrap.min.css">
+
   <style>
     body {
-      background-color: #fff;
+
+      background-color: #f8f9fa;
+
       display: flex;
+
       justify-content: center;
+
       align-items: center;
-      height: 100vh;
+
+      min-height: 100vh;
+
+      padding: 20px;
     }
 
     .login-card {
+
+      background: #fff;
+
       padding: 3rem;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+
+      border-radius: 16px;
+
+      box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.08);
+
       width: 100%;
+
       max-width: 450px;
     }
 
     .logo {
+
       display: block;
+
       margin: 0 auto 2rem auto;
+
       max-width: 180px;
     }
 
     .login-card h4 {
+
       font-size: 1.8rem;
+
       margin-bottom: 2rem;
+
       text-align: center;
-      font-weight: bold;
+
+      font-weight: 700;
+
+      color: #212529;
     }
 
     .form-control {
-      margin-bottom: 1.5rem;
-      font-size: 1.2rem;
-      padding: 0.8rem;
+
+      margin-bottom: 1.2rem;
+
+      font-size: 1rem;
+
+      padding: 0.9rem;
     }
 
     .btn-primary {
+
       width: 100%;
-      font-size: 1.2rem;
-      padding: 0.8rem;
+
+      padding: 0.9rem;
+
+      font-size: 1rem;
+
+      font-weight: 600;
     }
 
     .text-center a {
+
       text-decoration: none;
-      font-size: 1.1rem;
+    }
+
+    .erro {
+
+      color: #dc3545;
+
+      font-size: 0.95rem;
+
+      margin-bottom: 1rem;
+
+      text-align: center;
+    }
+
+    .sucesso {
+
+      color: #198754;
+
+      font-size: 0.95rem;
+
+      margin-bottom: 1rem;
+
+      text-align: center;
     }
   </style>
+
 </head>
+
 <body>
+
   <div class="login-card">
+
     <img src="img/logo.png" alt="Logo" class="logo">
-    <h4 class="text-center mb-3">Login</h4>
+
+    <h4>
+      Login
+    </h4>
+
+    <div id="mensagem"></div>
+
     <form id="LoginForm">
+
       <input type="email" id="email" class="form-control" placeholder="Email" required>
+
       <input type="password" id="senha" class="form-control" placeholder="Senha" required>
-      <button type="submit" class="btn btn-primary">Fazer Login</button>
+
+      <button type="submit" class="btn btn-primary" id="btnLogin">
+
+        Fazer Login
+
+      </button>
+
     </form>
-    <p class="text-center mt-3">Não tem conta? <a href="cadastro.html">Criar conta</a></p>
+
+    <p class="text-center mt-3">
+
+      Não tem conta?
+
+      <a href="cadastro.html">
+
+        Criar conta
+
+      </a>
+
+    </p>
+
   </div>
+
   <script>
-    const form = document.getElementById('LoginForm');
-    
-    form.addEventListener('submit', async function(event) {
-      event.preventDefault();
-    
-      const dados = {
-        email: document.getElementById('email').value,
-        senha: document.getElementById('senha').value
-      };
-    
-      try {
-        const response = await fetch('http://localhost:8080/usuario/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(dados)
-        });
-    
-        if (response.ok) {
-          const resultado = await response.json();
-    
-          // ✔ salva no localStorage
-          localStorage.setItem("usuario", JSON.stringify(resultado));
-    
-          alert("Login realizado com sucesso!");
-    
-          // ✔ redireciona
-          window.location.href = "index.html";
-    
-        } else {
-          const erro = await response.json().catch(() => null);
-          alert("Erro: " + (erro?.error || "Email ou senha inválidos"));
+    const form =
+      document.getElementById("LoginForm");
+
+    const mensagem =
+      document.getElementById("mensagem");
+
+    const btnLogin =
+      document.getElementById("btnLogin");
+
+    function mostrarMensagem(texto, tipo) {
+
+      mensagem.innerHTML = `
+        <div class="${tipo}">
+            ${texto}
+        </div>
+    `;
+    }
+
+    form.addEventListener(
+      "submit",
+      async function (event) {
+
+        event.preventDefault();
+
+        mensagem.innerHTML = "";
+
+        const email =
+          document.getElementById("email")
+          .value
+          .trim();
+
+        const senha =
+          document.getElementById("senha")
+          .value;
+
+        // =====================
+        // VALIDAÇÃO
+        // =====================
+
+        if (!email || !senha) {
+
+          mostrarMensagem(
+            "Preencha todos os campos.",
+            "erro"
+          );
+
+          return;
         }
-    
-      } catch (error) {
-        console.error("Erro:", error);
-        alert("Não foi possível conectar ao servidor.");
-      }
-    });
-    </script>
+
+        const dados = {
+          email,
+          senha
+        };
+
+        try {
+
+          btnLogin.disabled = true;
+
+          btnLogin.innerText =
+            "Entrando...";
+
+          const response =
+            await fetch(
+              "http://localhost:8080/usuario/login", {
+
+                method: "POST",
+
+                headers: {
+                  "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(dados)
+              }
+            );
+
+          // =====================
+          // SUCESSO
+          // =====================
+
+          if (response.ok) {
+
+            const usuario =
+              await response.json();
+
+            localStorage.setItem(
+              "usuario",
+              JSON.stringify(usuario)
+            );
+
+            mostrarMensagem(
+              "Login realizado com sucesso!",
+              "sucesso"
+            );
+
+            setTimeout(() => {
+
+              window.location.href =
+                "index.html";
+
+            }, 1000);
+
+            return;
+          }
+
+          // =====================
+          // ERRO BACKEND
+          // =====================
+
+          let erroTexto =
+            "Email ou senha inválidos.";
+
+          try {
+
+            const erro =
+              await response.text();
+
+            if (erro) {
+
+              erroTexto = erro;
+            }
+
+          } catch (e) {
+
+            console.error(e);
+          }
+
+          mostrarMensagem(
+            erroTexto,
+            "erro"
+          );
+
+        } catch (error) {
+
+          console.error(error);
+
+          mostrarMensagem(
+            "Não foi possível conectar ao servidor.",
+            "erro"
+          );
+
+        } finally {
+
+          btnLogin.disabled = false;
+
+          btnLogin.innerText =
+            "Fazer Login";
+        }
+
+      });
+  </script>
 
 </body>
+
 </html>

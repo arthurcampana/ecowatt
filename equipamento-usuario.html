@@ -1,371 +1,335 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Equipamentos</title>
+    <title>Equipamentos</title>
 
-<link rel="stylesheet" href="css/bootstrap.min.css">
-<link rel="stylesheet" href="css/equipamentos.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/equipamentos.css">
 
 </head>
 
 <body>
 
-<nav class="navbar navbar-expand-lg bg-header">
+    <nav class="navbar navbar-expand-lg bg-header">
 
-<div class="container">
+        <div class="container">
 
-<a class="navbar-brand" href="#">
-<img src="img/logo.png" class="logo">
-</a>
+            <a class="navbar-brand" href="#">
+                <img src="img/logo.png" class="logo">
+            </a>
 
-<button
-class="navbar-toggler"
-type="button"
-data-bs-toggle="collapse"
-data-bs-target="#navbarMenu">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
 
-<span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
 
-</button>
+            </button>
 
-<div class="collapse navbar-collapse" id="navbarMenu">
+            <div class="collapse navbar-collapse" id="navbarMenu">
 
-<ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto">
 
-<li class="nav-item">
-                    <a class="nav-link" href="index.html">
-                        Início
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            Início
+                        </a>
+                    </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="consumo.html">
-                        Registrar Consumo
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="consumo.html">
+                            Registrar Consumo
+                        </a>
+                    </li>
 
-                <li class="nav-item">
-                    <a class="nav-link active" href="equipamento-usuario.html">
-                        Equipamentos
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="equipamento-usuario.html">
+                            Equipamentos
+                        </a>
+                    </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="relatorios.html">
-                        Relatórios
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="relatorios.html">
+                            Relatórios
+                        </a>
+                    </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="metas.html">
-                        Metas
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="metas.html">
+                            Metas
+                        </a>
+                    </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="configuracoes.html">
-                        Configurações
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="configuracoes.html">
+                            Configurações
+                        </a>
+                    </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="historico.html">
-                        Histórico
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="historico.html">
+                            Histórico
+                        </a>
+                    </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="perfil.html">
-                        Perfil
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="perfil.html">
+                            Perfil
+                        </a>
+                    </li>
 
-</ul>
+                </ul>
 
-</div>
+            </div>
 
-</div>
+        </div>
 
-</nav>
+    </nav>
 
-<main class="container">
+    <main class="container">
 
-<div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-3">
 
-<div>
+            <div>
 
-<h2>Equipamentos</h2>
+                <h2>
+                    Equipamentos
+                </h2>
 
-<p>
-Gerencie os equipamentos do usuário.
-</p>
+                <p>
+                    Gerencie os equipamentos do usuário.
+                </p>
 
-</div>
+            </div>
 
-<button
-class="btn-add"
-id="btnAbrirFormulario">
+            <button class="btn-add" id="btnAbrirFormulario">
 
-Adicionar Equipamento
+                Adicionar Equipamento
 
-</button>
+            </button>
 
-</div>
+        </div>
 
-<!-- LISTA -->
-<div
-class="lista-equip"
-id="listaEquipamentos">
+        <!-- ========================= -->
+        <!-- FORM PRIMEIRO -->
+        <!-- ========================= -->
 
-</div>
+        <div class="form-card" id="cardFormulario">
 
-<!-- FORM -->
-<div
-class="form-card"
-id="cardFormulario">
+            <button type="button" class="btn-fechar-form" id="btnFecharFormulario">
 
-<button
-type="button"
-class="btn-fechar-form"
-id="btnFecharFormulario">
+                ✕
 
-✕
+            </button>
 
-</button>
+            <div class="form-header">
 
-<div class="form-header">
+                <h5 id="tituloFormulario">
 
-<h5 id="tituloFormulario">
+                    Novo equipamento
 
-Novo equipamento
+                </h5>
 
-</h5>
+            </div>
 
-</div>
+            <div class="form-body">
 
-<div class="form-body">
+                <form id="formEquipUser">
 
-<form id="formEquipUser">
+                    <input type="hidden" id="equipUserId">
 
-<input
-type="hidden"
-id="equipUserId">
+                    <!-- EQUIPAMENTO -->
+                    <div class="mb-4">
 
-<div class="mb-4">
+                        <label class="form-label">
 
-<label class="form-label">
-Equipamento
-</label>
+                            Equipamento
 
-<select
-id="equipamento"
-class="form-select"
-required>
+                        </label>
 
-<option value="">
-Selecione um equipamento
-</option>
+                        <select id="equipamento" class="form-select" required>
 
-</select>
+                            <option value="">
 
-<div class="mt-3">
+                                Selecione um equipamento
 
-<button
-type="button"
-class="btn btn-outline-success"
-data-bs-toggle="modal"
-data-bs-target="#modalEquipamento">
+                            </option>
 
-+ Cadastrar novo equipamento
+                        </select>
 
-</button>
+                        <div class="mt-3">
 
-</div>
+                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                                data-bs-target="#modalEquipamento">
 
-</div>
+                                + Cadastrar novo equipamento
 
-<div class="mb-4">
+                            </button>
 
-<label class="form-label">
+                        </div>
 
-Nome de identificação
+                    </div>
 
-</label>
+                    <!-- NOME -->
+                    <div class="mb-4">
 
-<input
-type="text"
-id="nomeIdentificacao"
-class="form-control"
-required>
+                        <label class="form-label">
 
-</div>
+                            Nome de identificação
 
-<div class="mb-4">
+                        </label>
 
-<label class="form-label">
+                        <input type="text" id="nomeIdentificacao" class="form-control" required>
 
-Horas por dia
+                    </div>
 
-</label>
+                    <!-- HORAS -->
+                    <div class="mb-4">
 
-<input
-type="number"
-step="0.1"
-id="horasPorDia"
-class="form-control"
-required>
+                        <label class="form-label">
 
-</div>
+                            Horas por dia
 
-<div class="preview mb-4">
+                        </label>
 
-<div class="preview-label">
+                        <input type="number" step="0.1" id="horasPorDia" class="form-control" required>
 
-Consumo esperado
+                    </div>
 
-</div>
+                    <!-- PREVIEW -->
+                    <div class="preview mb-4">
 
-<div class="preview-value">
+                        <div class="preview-label">
 
-<span id="consumoEsperado">
+                            Consumo esperado
 
-0.00
+                        </div>
 
-</span>
+                        <div class="preview-value">
 
-<small>kWh/dia</small>
+                            <span id="consumoEsperado">
 
-</div>
+                                0.00
 
-</div>
+                            </span>
 
-<button
-type="submit"
-class="btn-save">
+                            <small>
+                                kWh/dia
+                            </small>
 
-Salvar
+                        </div>
 
-</button>
+                    </div>
 
-</form>
+                    <button type="submit" class="btn-save">
 
-</div>
+                        Salvar
 
-</div>
+                    </button>
 
-</main>
+                </form>
 
-<!-- MODAL -->
-<div
-class="modal fade"
-id="modalEquipamento"
-tabindex="-1">
+            </div>
 
-<div class="modal-dialog modal-dialog-centered">
+        </div>
 
-<div class="modal-content">
+        <!-- ========================= -->
+        <!-- LISTA DEPOIS -->
+        <!-- ========================= -->
 
-<div class="modal-header">
+        <div class="lista-equip" id="listaEquipamentos">
 
-<h5 class="modal-title">
+        </div>
 
-Novo Equipamento
+    </main>
 
-</h5>
+    <!-- MODAL -->
+    <div class="modal fade" id="modalEquipamento" tabindex="-1">
 
-<button
-type="button"
-class="btn-close"
-data-bs-dismiss="modal">
+        <div class="modal-dialog modal-dialog-centered">
 
-</button>
+            <div class="modal-content">
 
-</div>
+                <div class="modal-header">
 
-<div class="modal-body">
+                    <h5 class="modal-title">
 
-<form id="formNovoEquipamento">
+                        Novo Equipamento
 
-<div class="mb-3">
+                    </h5>
 
-<label class="form-label">
-Nome
-</label>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
 
-<input
-type="text"
-id="novoNome"
-class="form-control"
-required>
+                    </button>
 
-</div>
+                </div>
 
-<div class="mb-3">
+                <div class="modal-body">
 
-<label class="form-label">
-Modelo
-</label>
+                    <form id="formNovoEquipamento">
 
-<input
-type="text"
-id="novoModelo"
-class="form-control">
+                        <div class="mb-3">
 
-</div>
+                            <label class="form-label">
+                                Nome
+                            </label>
 
-<div class="mb-3">
+                            <input type="text" id="novoNome" class="form-control" required>
 
-<label class="form-label">
-Consumo por hora
-</label>
+                        </div>
 
-<input
-type="number"
-step="0.01"
-id="novoConsumo"
-class="form-control"
-required>
+                        <div class="mb-3">
 
-</div>
+                            <label class="form-label">
+                                Modelo
+                            </label>
 
-</form>
+                            <input type="text" id="novoModelo" class="form-control">
 
-</div>
+                        </div>
 
-<div class="modal-footer">
+                        <div class="mb-3">
 
-<button
-type="button"
-class="btn btn-light"
-data-bs-dismiss="modal">
+                            <label class="form-label">
+                                Consumo por hora
+                            </label>
 
-Cancelar
+                            <input type="number" step="0.01" id="novoConsumo" class="form-control" required>
 
-</button>
+                        </div>
 
-<button
-type="button"
-class="btn btn-success"
-id="btnSalvarEquipamento">
+                    </form>
 
-Salvar Equipamento
+                </div>
 
-</button>
+                <div class="modal-footer">
 
-</div>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">
 
-</div>
+                        Cancelar
 
-</div>
+                    </button>
 
-</div>
+                    <button type="button" class="btn btn-success" id="btnSalvarEquipamento">
 
-<script src="js/equipamentos.js"></script>
-<script src="js/bootstrap.bundle.min.js"></script>
+                        Salvar Equipamento
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="js/equipamentos.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

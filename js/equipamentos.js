@@ -174,54 +174,57 @@ function renderizarEquipamentos(dados){
 
     lista.innerHTML = "";
 
-    dados.forEach(item => {
+    dados.reverse().forEach(item => {
 
-        lista.innerHTML += `
+        lista.insertAdjacentHTML(
+            "afterbegin",
+            `
 
-        <div class="equip-card">
+            <div class="equip-card">
 
-            <div class="equip-info">
+                <div class="equip-info">
 
-                <h5>
-                    ${item.nomeIdentificacao}
-                </h5>
+                    <h5>
+                        ${item.nomeIdentificacao}
+                    </h5>
 
-                <p>
-                    ${item.equipamento.nome}
-                </p>
+                    <p>
+                        ${item.equipamento.nome}
+                    </p>
 
-                <div class="badge-consumo">
+                    <div class="badge-consumo">
 
-                    ${Number(item.consumoEsperado).toFixed(2)}
-                    kWh/dia
+                        ${Number(item.consumoEsperado).toFixed(2)}
+                        kWh/dia
+
+                    </div>
+
+                </div>
+
+                <div class="equip-actions">
+
+                    <button
+                    class="btn-action btn-edit"
+                    onclick="editarEquipamento(${item.id})">
+
+                    Editar
+
+                    </button>
+
+                    <button
+                    class="btn-action btn-delete"
+                    onclick="deletarEquipamento(${item.id})">
+
+                    Excluir
+
+                    </button>
 
                 </div>
 
             </div>
 
-            <div class="equip-actions">
-
-                <button
-                class="btn-action btn-edit"
-                onclick="editarEquipamento(${item.id})">
-
-                Editar
-
-                </button>
-
-                <button
-                class="btn-action btn-delete"
-                onclick="deletarEquipamento(${item.id})">
-
-                Excluir
-
-                </button>
-
-            </div>
-
-        </div>
-
-        `;
+            `
+        );
 
     });
 

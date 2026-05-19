@@ -1,233 +1,206 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Registrar Consumo</title>
+    <title>Registrar Consumo</title>
 
-<link rel="stylesheet" href="css/bootstrap.min.css">
-<link rel="stylesheet" href="css/consumo.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/consumo.css">
 
 </head>
 
 <body>
 
-<nav class="navbar navbar-expand-lg bg-header">
+    <nav class="navbar navbar-expand-lg bg-header">
 
-<div class="container">
+        <div class="container">
 
-<a class="navbar-brand" href="index.html">
-<img src="img/logo.png" class="logo" alt="Logo">
-</a>
+            <a class="navbar-brand" href="index.html">
+                <img src="img/logo.png" class="logo" alt="Logo">
+            </a>
 
-<button
-class="navbar-toggler"
-type="button"
-data-bs-toggle="collapse"
-data-bs-target="#menuNavbar">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNavbar">
 
-<span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
 
-</button>
+            </button>
 
-<div class="collapse navbar-collapse" id="menuNavbar">
+            <div class="collapse navbar-collapse" id="menuNavbar">
 
-<ul class="navbar-nav ms-auto align-items-lg-center">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
 
-<li class="nav-item">
-<a class="nav-link" href="index.html">
-Início
-</a>
-</li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            Início
+                        </a>
+                    </li>
 
-<li class="nav-item">
-<a class="nav-link active" href="consumo.html">
-Registrar Consumo
-</a>
-</li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="consumo.html">
+                            Registrar Consumo
+                        </a>
+                    </li>
 
-<li class="nav-item">
-<a class="nav-link" href="equipamento-usuario.html">
-Equipamentos
-</a>
-</li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="equipamento-usuario.html">
+                            Equipamentos
+                        </a>
+                    </li>
 
-<li class="nav-item">
-<a class="nav-link" href="relatorios.html">
-Relatórios
-</a>
-</li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="relatorios.html">
+                            Relatórios
+                        </a>
+                    </li>
 
-<li class="nav-item">
-<a class="nav-link" href="metas.html">
-Metas
-</a>
-</li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="metas.html">
+                            Metas
+                        </a>
+                    </li>
 
-<li class="nav-item">
-<a class="nav-link" href="configuracoes.html">
-Configurações
-</a>
-</li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="configuracoes.html">
+                            Configurações
+                        </a>
+                    </li>
 
-<li class="nav-item">
-<a class="nav-link" href="historico.html">
-Histórico
-</a>
-</li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="historico.html">
+                            Histórico
+                        </a>
+                    </li>
 
-<li class="nav-item">
-<a class="nav-link" href="perfil.html">
-Perfil
-</a>
-</li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="perfil.html">
+                            Perfil
+                        </a>
+                    </li>
 
-</ul>
+                </ul>
 
-</div>
+            </div>
 
-</div>
+        </div>
 
-</nav>
+    </nav>
 
-<main class="container content-wrap">
+    <main class="container content-wrap">
 
-<div class="page-header">
+        <div class="page-header">
 
-<div>
+            <div>
 
-<h3>
-Registrar Consumo
-</h3>
+                <h3>
+                    Registrar Consumo
+                </h3>
 
-<p>
-Gerencie e acompanhe os registros de consumo energético.
-</p>
+                <p>
+                    Gerencie e acompanhe os registros de consumo energético.
+                </p>
 
-</div>
+            </div>
 
-<button
-class="btn-add"
-id="btnAbrirFormulario">
+            <button class="btn-add" id="btnAbrirFormulario">
 
-Adicionar Consumo
+                Adicionar Consumo
 
-</button>
+            </button>
 
-</div>
+        </div>
 
-<!-- FORM -->
+        <!-- FORM -->
 
-<div
-class="form-card"
-id="cardFormulario">
+        <div class="form-card" id="cardFormulario">
 
-<div class="form-card-header">
+            <div class="form-card-header">
 
-<div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex justify-content-between align-items-center">
 
-<h5 id="tituloFormulario">
-Novo Consumo
-</h5>
+                    <h5 id="tituloFormulario">
+                        Novo Consumo
+                    </h5>
 
-<button
-type="button"
-class="btn-close-custom"
-id="btnFecharFormulario">
+                    <button type="button" class="btn-close-custom" id="btnFecharFormulario">
 
-×
+                        ×
 
-</button>
+                    </button>
 
-</div>
+                </div>
 
-</div>
+            </div>
 
-<div class="form-card-body">
+            <div class="form-card-body">
 
-<form id="formConsumo">
+                <form id="formConsumo">
 
-<input
-type="hidden"
-id="consumoId">
+                    <input type="hidden" id="consumoId">
 
-<div class="mb-4">
+                    <div class="mb-4">
 
-<label
-for="consumoKwh"
-class="form-label">
+                        <label for="consumoKwh" class="form-label">
 
-Consumo (kWh)
+                            Consumo (kWh)
 
-</label>
+                        </label>
 
-<input
-type="number"
-step="0.01"
-id="consumoKwh"
-class="form-control"
-placeholder="Ex.: 42.50"
-required>
+                        <input type="number" step="0.01" id="consumoKwh" class="form-control" placeholder="Ex.: 42.50"
+                            required>
 
-<div class="helper-text">
-Informe o valor consumido.
-</div>
+                        <div class="helper-text">
+                            Informe o valor consumido.
+                        </div>
 
-</div>
+                    </div>
 
-<div class="mb-4">
+                    <div class="mb-4">
 
-<label
-for="dataRegistro"
-class="form-label">
+                        <label for="dataRegistro" class="form-label">
 
-Data
+                            Data
 
-</label>
+                        </label>
 
-<input
-type="datetime-local"
-id="dataRegistro"
-class="form-control">
+                        <input type="datetime-local" id="dataRegistro" class="form-control">
 
-</div>
+                    </div>
 
-<button
-type="submit"
-class="btn-save">
+                    <button type="submit" class="btn-save">
 
-Salvar Consumo
+                        Salvar Consumo
 
-</button>
+                    </button>
 
-</form>
+                </form>
 
-</div>
+            </div>
 
-</div>
+        </div>
 
-<!-- HISTÓRICO -->
+        <!-- HISTÓRICO -->
 
-<div class="historico-title">
+        <div class="historico-title">
 
-<h4>
-Histórico de Consumos
-</h4>
+            <h4>
+                Histórico de Consumos
+            </h4>
 
-</div>
+        </div>
 
-<div
-class="lista-consumos"
-id="listaConsumos">
+        <div class="lista-consumos" id="listaConsumos">
 
-</div>
+        </div>
 
-</main>
+    </main>
 
-<script src="js/consumo.js"></script>
-<script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/consumo.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

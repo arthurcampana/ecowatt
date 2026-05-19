@@ -1,116 +1,327 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
+
 <head>
+
   <meta charset="UTF-8">
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro - Consumo Consciente</title>
+
+  <title>
+    Cadastro - Consumo Consciente
+  </title>
+
   <link rel="stylesheet" href="css/bootstrap.min.css">
+
   <style>
     body {
-      background-color: #fff;
+
+      background-color: #f8f9fa;
+
       display: flex;
+
       justify-content: center;
+
       align-items: center;
-      height: 100vh;
+
+      min-height: 100vh;
+
+      padding: 20px;
     }
 
     .register-card {
+
+      background: #fff;
+
       padding: 3rem;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+
+      border-radius: 16px;
+
+      box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.08);
+
       width: 100%;
+
       max-width: 450px;
     }
 
     .logo {
+
       display: block;
+
       margin: 0 auto 2rem auto;
+
       max-width: 180px;
     }
 
     .register-card h4 {
+
       font-size: 1.8rem;
+
       margin-bottom: 2rem;
+
       text-align: center;
-      font-weight: bold;
+
+      font-weight: 700;
+
+      color: #212529;
     }
 
     .form-control {
-      margin-bottom: 1.5rem;
-      font-size: 1.2rem;
-      padding: 0.8rem;
+
+      margin-bottom: 1.2rem;
+
+      font-size: 1rem;
+
+      padding: 0.9rem;
     }
 
     .btn-primary {
+
       width: 100%;
-      font-size: 1.2rem;
-      padding: 0.8rem;
+
+      padding: 0.9rem;
+
+      font-size: 1rem;
+
+      font-weight: 600;
     }
 
     .text-center a {
+
       text-decoration: none;
-      font-size: 1.1rem;
+    }
+
+    .erro {
+
+      color: #dc3545;
+
+      font-size: 0.9rem;
+
+      margin-bottom: 1rem;
+
+      text-align: center;
+    }
+
+    .sucesso {
+
+      color: #198754;
+
+      font-size: 0.9rem;
+
+      margin-bottom: 1rem;
+
+      text-align: center;
     }
   </style>
+
 </head>
+
 <body>
+
   <div class="register-card">
+
     <img src="img/logo.png" alt="Logo" class="logo">
-    <h4>Cadastro</h4>
+
+    <h4>
+      Cadastro
+    </h4>
+
+    <div id="mensagem"></div>
+
     <form id="cadastroForm">
+
       <input type="text" id="nome" class="form-control" placeholder="Nome completo" required>
+
       <input type="email" id="email" class="form-control" placeholder="Email" required>
+
       <input type="password" id="senha" class="form-control" placeholder="Senha" required>
-      <input type="password" id="confirmarSenha" class="form-control" placeholder="Confirmar Senha" required>
-      <button type="submit" class="btn btn-primary">Cadastrar</button>
+
+      <input type="password" id="confirmarSenha" class="form-control" placeholder="Confirmar senha" required>
+
+      <button type="submit" class="btn btn-primary">
+
+        Cadastrar
+
+      </button>
+
     </form>
-    <p class="text-center mt-3">Já tem conta? <a href="login.html">Entrar</a></p>
+
+    <p class="text-center mt-3">
+
+      Já tem conta?
+
+      <a href="login.html">
+
+        Entrar
+
+      </a>
+
+    </p>
+
   </div>
 
   <script>
-    const form = document.getElementById('cadastroForm');
-    
-    form.addEventListener('submit', async function(event) {
-      event.preventDefault();
-    
-      const senha = document.getElementById('senha').value;
-      const confirmarSenha = document.getElementById('confirmarSenha').value;
-    
-      if (senha !== confirmarSenha) {
-        alert("As senhas não coincidem!");
-        return;
-      }
-    
-      const dados = {
-        nome: document.getElementById('nome').value,
-        email: document.getElementById('email').value,
-        senha: senha
-      };
-    
-      try {
-        const response = await fetch('http://localhost:8080/usuario/add', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(dados)
-        });
-    
-        if (response.ok) {
-          await response.json();
-          alert("Usuário cadastrado com sucesso!");
-          window.location.href = "login.html";
-        } else {
-          const erro = await response.json().catch(() => null);
-          alert("Erro no servidor: " + (erro?.error || "Erro desconhecido"));
+    const form =
+      document.getElementById("cadastroForm");
+
+    const mensagem =
+      document.getElementById("mensagem");
+
+    function mostrarMensagem(texto, tipo) {
+
+      mensagem.innerHTML = `
+        <div class="${tipo}">
+            ${texto}
+        </div>
+    `;
+    }
+
+    form.addEventListener(
+      "submit",
+      async function (event) {
+
+        event.preventDefault();
+
+        mensagem.innerHTML = "";
+
+        const nome =
+          document.getElementById("nome")
+          .value
+          .trim();
+
+        const email =
+          document.getElementById("email")
+          .value
+          .trim();
+
+        const senha =
+          document.getElementById("senha")
+          .value;
+
+        const confirmarSenha =
+          document.getElementById("confirmarSenha")
+          .value;
+
+        // =====================
+        // VALIDAÇÕES
+        // =====================
+
+        if (!nome || !email || !senha) {
+
+          mostrarMensagem(
+            "Preencha todos os campos.",
+            "erro"
+          );
+
+          return;
         }
-    
-      } catch (error) {
-        console.error("Erro:", error);
-        alert("Não foi possível conectar ao servidor.");
-      }
-    });
-    </script> 
+
+        if (senha.length < 6) {
+
+          mostrarMensagem(
+            "A senha deve ter pelo menos 6 caracteres.",
+            "erro"
+          );
+
+          return;
+        }
+
+        if (senha !== confirmarSenha) {
+
+          mostrarMensagem(
+            "As senhas não coincidem.",
+            "erro"
+          );
+
+          return;
+        }
+
+        const dados = {
+          nome,
+          email,
+          senha
+        };
+
+        try {
+
+          const response =
+            await fetch(
+              "http://localhost:8080/usuario/add", {
+
+                method: "POST",
+
+                headers: {
+                  "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(dados)
+              }
+            );
+
+          // =====================
+          // SUCESSO
+          // =====================
+
+          if (response.ok) {
+
+            mostrarMensagem(
+              "Usuário cadastrado com sucesso!",
+              "sucesso"
+            );
+
+            form.reset();
+
+            setTimeout(() => {
+
+              window.location.href =
+                "login.html";
+
+            }, 1500);
+
+            return;
+          }
+
+          // =====================
+          // ERRO BACKEND
+          // =====================
+
+          let erroTexto =
+            "Erro ao cadastrar usuário.";
+
+          try {
+
+            const erro =
+              await response.text();
+
+            if (erro) {
+
+              erroTexto = erro;
+            }
+
+          } catch (e) {
+
+            console.error(e);
+          }
+
+          mostrarMensagem(
+            erroTexto,
+            "erro"
+          );
+
+        } catch (error) {
+
+          console.error(error);
+
+          mostrarMensagem(
+            "Não foi possível conectar ao servidor.",
+            "erro"
+          );
+        }
+
+      });
+  </script>
 
 </body>
+
 </html>
